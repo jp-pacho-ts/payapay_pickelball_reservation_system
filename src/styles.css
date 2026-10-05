@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+body { margin: 0; }
+button:not(:disabled), input[type="radio"] { cursor: pointer; }
+
+@media print {
+  button { display: none !important; }
+  * { print-color-adjust: exact; }
+}
