@@ -1,9 +1,9 @@
 import { useState, useMemo, useEffect, type ChangeEvent, type MouseEvent } from 'react';
-import { 
-  MapPin, Calendar as CalendarIcon, Clock, CheckCircle2, 
-  Sun, Moon, User, Mail, Phone, ShieldCheck, 
+import {
+  MapPin, Calendar as CalendarIcon, Clock, CheckCircle2,
+  Sun, Moon, User, Mail, Phone, ShieldCheck,
   Users, CreditCard, Trash2, AlertTriangle,
-  Smartphone, Wallet, Lock, ArrowLeft, Check, 
+  Smartphone, Wallet, Lock, ArrowLeft, Check,
   Download, QrCode, AlertCircle, Map, Navigation
 } from 'lucide-react';
 
@@ -26,11 +26,11 @@ const RULES = [
 const generateTimeSlots = () => {
   const slots = [];
   // 6 AM (6) to 1 AM (25) - Last booking can be 1 AM for 1 hour ending at 2 AM
-  for (let i = 6; i <= 25; i++) { 
+  for (let i = 6; i <= 25; i++) {
     let displayHour = i % 24;
     displayHour = displayHour === 0 ? 12 : (displayHour > 12 ? displayHour - 12 : displayHour);
     let ampm = i < 12 || i >= 24 ? 'AM' : 'PM';
-    
+
     slots.push({
       value: i,
       label: `${displayHour}:00 ${ampm}`,
@@ -52,8 +52,8 @@ const getParkDate = () => new Intl.DateTimeFormat('en-CA', {
 
 export default function PayapayPickleballApp() {
   // App Flow State: 'form' -> 'payment' -> 'success'
-  const [step, setStep] = useState('form'); 
-  
+  const [step, setStep] = useState('form');
+
   // Booking Selection State
   const [selectedCourt, setSelectedCourt] = useState(COURTS[0].id);
   const [selectedDate, setSelectedDate] = useState('');
@@ -98,11 +98,11 @@ export default function PayapayPickleballApp() {
       // 6:00 AM–4:00 PM is ₱350/hr, 4:00 PM–2:00 AM is ₱450/hr
       let rate = (currentHour >= 6 && currentHour < 16) ? 350 : 450;
       total += rate;
-      
+
       let displayHour = currentHour % 24;
       displayHour = displayHour === 0 ? 12 : (displayHour > 12 ? displayHour - 12 : displayHour);
       let ampm = currentHour < 12 || currentHour >= 24 ? 'AM' : 'PM';
-      
+
       currentBreakdown.push({
         hourLabel: `${displayHour}:00 ${ampm}`,
         rate: rate
@@ -115,14 +115,14 @@ export default function PayapayPickleballApp() {
   const validateForm = () => {
     const newErrors: FormErrors = {};
     if (!formData.name.trim()) newErrors.name = 'Full name is required';
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
       newErrors.email = 'Email address is required';
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     if (!formData.phone.trim()) {
        newErrors.phone = 'Phone number is required';
     } else if (formData.phone.replace(/[^0-9]/g, '').length < 10) {
@@ -159,7 +159,7 @@ export default function PayapayPickleballApp() {
       const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
       let result = 'RES-';
       for (let i = 0; i < 6; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
-      
+
       setReservationNumber(result);
       setIsProcessing(false);
       setStep('success');
@@ -206,7 +206,7 @@ export default function PayapayPickleballApp() {
 
             <div className="space-y-3 mb-8">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-1">How would you like to pay?</h3>
-              
+
               {/* Payment Option: GCash */}
               <label className={`flex items-center p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'gcash' ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
                 <input type="radio" name="payment" className="hidden" checked={paymentMethod === 'gcash'} onChange={() => setPaymentMethod('gcash')} />
@@ -281,7 +281,7 @@ export default function PayapayPickleballApp() {
             {/* Receipt Body */}
             <div className="p-8 pb-4 relative">
               <div className="absolute top-0 left-8 right-8 h-px bg-dashed border-t-2 border-dashed border-gray-200 -mt-px"></div>
-              
+
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 bg-gray-50 p-5 rounded-xl border border-gray-100 gap-4 sm:gap-0">
                 <div>
                   <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mb-1">Reservation No.</p>
@@ -329,13 +329,13 @@ export default function PayapayPickleballApp() {
             </div>
 
             <div className="p-8 pt-6 flex flex-col sm:flex-row gap-4 bg-white border-t border-gray-50">
-              <button 
+              <button
                 onClick={() => window.print()}
                 className="flex-1 bg-white border-2 border-gray-200 text-gray-700 py-3.5 rounded-xl font-bold hover:bg-gray-50 transition-colors flex justify-center items-center gap-2"
               >
                 <Download className="w-5 h-5" /> Save Receipt
               </button>
-              <button 
+              <button
                 onClick={resetBooking}
                 className="flex-1 bg-emerald-950 text-lime-400 py-3.5 rounded-xl font-bold hover:bg-emerald-900 transition-colors shadow-lg shadow-emerald-900/20"
               >
@@ -357,7 +357,7 @@ export default function PayapayPickleballApp() {
           <div className="absolute right-0 top-0 bottom-0 w-64 opacity-5 pointer-events-none">
             <svg viewBox="0 0 100 100" className="w-full h-full fill-current text-white"><circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="10" fill="none"/><path d="M50 10 V90 M10 50 H90" stroke="currentColor" strokeWidth="10"/></svg>
           </div>
-          
+
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lime-400/10 text-lime-400 text-sm font-bold w-fit mb-6 border border-lime-400/20">
             <Map className="w-4 h-4" /> Tacloban's Premier Pickleball Facility
           </div>
@@ -367,7 +367,7 @@ export default function PayapayPickleballApp() {
           <p className="text-emerald-100/90 text-lg mb-8 max-w-xl leading-relaxed">
             Welcome to Payapay Pickleball Park! Whether you're a seasoned pro or just picking up a paddle for the first time, our three state-of-the-art courts (Bebs, Monte, and Biyo) are ready for your next match.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-6">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-lg bg-emerald-800/50 flex items-center justify-center shrink-0 border border-emerald-700/50">
@@ -389,7 +389,7 @@ export default function PayapayPickleballApp() {
             </div>
           </div>
         </div>
-        
+
         {/* Info Right - Quick Rates */}
         <div className="bg-emerald-900 md:w-1/3 p-8 flex flex-col justify-center border-l border-emerald-800/50">
           <h3 className="text-white font-bold text-xl mb-6">Court Rates</h3>
@@ -440,14 +440,14 @@ export default function PayapayPickleballApp() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        
+
         {/* Render the beautifully designed About Section */}
         {renderAboutSection()}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column: Form Sections */}
           <div className="lg:col-span-8 space-y-8">
-            
+
             {/* Section 1: Court */}
             <section className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200">
               <div className="flex items-center gap-3 mb-6">
@@ -463,8 +463,8 @@ export default function PayapayPickleballApp() {
                       type="button"
                       onClick={() => setSelectedCourt(court.id)}
                       className={`text-left p-5 rounded-xl border-2 transition-all duration-200 outline-none relative overflow-hidden
-                        ${isSelected 
-                          ? 'border-emerald-600 bg-emerald-50/50 ring-4 ring-emerald-600/10' 
+                        ${isSelected
+                          ? 'border-emerald-600 bg-emerald-50/50 ring-4 ring-emerald-600/10'
                           : 'border-gray-200 hover:border-emerald-300 hover:bg-gray-50 focus:border-emerald-500'}`}
                     >
                       <div className="flex justify-between items-start mb-3">
@@ -485,15 +485,15 @@ export default function PayapayPickleballApp() {
                 <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-black">2</div>
                 <h2 className="text-2xl font-bold text-gray-900">Date & Time</h2>
               </div>
-              
+
               <div className="space-y-8">
                 {/* Date Selection */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Select Date</label>
                   <div className="relative">
                     <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                    <input 
-                      type="date" 
+                    <input
+                      type="date"
                       min={getParkDate()}
                       value={selectedDate}
                       onChange={(e) => {
@@ -520,9 +520,9 @@ export default function PayapayPickleballApp() {
                           type="button"
                           onClick={() => setSelectedTime(slot.value)}
                           className={`py-2.5 px-1 rounded-lg text-sm font-semibold transition-all border
-                            ${isSelected 
-                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' 
-                              : slot.isNightRate 
+                            ${isSelected
+                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
+                              : slot.isNightRate
                                 ? 'bg-indigo-50/50 text-indigo-900 border-indigo-100 hover:bg-indigo-100'
                                 : 'bg-orange-50/50 text-orange-900 border-orange-100 hover:bg-orange-100'
                             }`}
@@ -540,10 +540,10 @@ export default function PayapayPickleballApp() {
                     Duration
                     <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md">{duration} Hour{duration > 1 ? 's' : ''}</span>
                   </label>
-                  <input 
-                    type="range" 
-                    min="1" 
-                    max={Math.min(6, 26 - selectedTime > 0 ? 26 - selectedTime : 1)} 
+                  <input
+                    type="range"
+                    min="1"
+                    max={Math.min(6, 26 - selectedTime > 0 ? 26 - selectedTime : 1)}
                     value={duration}
                     onChange={(e) => setDuration(parseInt(e.target.value))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
@@ -563,12 +563,12 @@ export default function PayapayPickleballApp() {
                 <h2 className="text-2xl font-bold text-gray-900">Player Details</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                
+
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Full Name</label>
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input 
+                    <input
                       type="text" name="name" placeholder="Juan Dela Cruz"
                       value={formData.name} onChange={handleInputChange}
                       className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all ${errors.name ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'}`}
@@ -581,7 +581,7 @@ export default function PayapayPickleballApp() {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input 
+                    <input
                       type="email" name="email" placeholder="juan@example.com"
                       value={formData.email} onChange={handleInputChange}
                       className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all ${errors.email ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'}`}
@@ -594,7 +594,7 @@ export default function PayapayPickleballApp() {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
                   <div className="relative">
                     <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input 
+                    <input
                       type="tel" name="phone" placeholder="0912 345 6789"
                       value={formData.phone} onChange={handleInputChange}
                       className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all ${errors.phone ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'}`}
@@ -607,7 +607,7 @@ export default function PayapayPickleballApp() {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Number of Players</label>
                   <div className="relative">
                     <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <select 
+                    <select
                       name="players" value={formData.players} onChange={handleInputChange}
                       className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all appearance-none cursor-pointer"
                     >
@@ -625,20 +625,20 @@ export default function PayapayPickleballApp() {
           {}
           {/* Right Column: Sticky Summary & Rules */}
           <div className="lg:col-span-4 space-y-6">
-            
+
             {/* Real-time Summary Card */}
             <div className="bg-emerald-950 rounded-2xl shadow-xl overflow-hidden sticky top-24 border border-emerald-900">
               <div className="p-6">
                 <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                   <CreditCard className="w-6 h-6 text-lime-400" /> Booking Summary
                 </h3>
-                
+
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center pb-4 border-b border-emerald-800/50">
                     <span className="text-emerald-100/70 text-sm">Court</span>
                     <span className="font-semibold text-white">{COURTS.find(c => c.id === selectedCourt)?.name}</span>
                   </div>
-                  
+
                   <div className="flex justify-between items-start pb-4 border-b border-emerald-800/50">
                     <span className="text-emerald-100/70 text-sm">Schedule</span>
                     <div className="text-right">
@@ -666,7 +666,7 @@ export default function PayapayPickleballApp() {
                   <span className="text-3xl font-black text-white">₱{totalCost.toFixed(2)}</span>
                 </div>
 
-                <button 
+                <button
                   onClick={proceedToPayment}
                   className="w-full py-4 bg-lime-400 hover:bg-lime-500 text-emerald-950 rounded-xl font-black text-lg transition-colors shadow-lg shadow-lime-400/20 active:scale-[0.98]"
                 >
